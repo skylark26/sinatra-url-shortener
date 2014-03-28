@@ -33,8 +33,8 @@ end
 
 get '/show-url/:code' do
   @showcode = params[:code]
-  
-  erb @showcode
+  @host = request.env["HTTP_HOST"]
+  erb "<a href=\"http://#{@host}/#{@showcode}\">http://#{@host}/#{@showcode}</a>"
 end
 
 get '/:code' do
