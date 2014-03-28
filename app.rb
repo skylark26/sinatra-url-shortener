@@ -2,6 +2,9 @@
 
 require 'sinatra'
 require 'mongoid'
+require 'haml'
+
+set :haml, {:format => :html5, :attr_wrapper => '"'}
 
 configure do
   Mongoid.load!("./mongoid.yml")
@@ -14,7 +17,7 @@ class Url
 end
 
 get '/' do
-  
+  haml :create
 end
 
 post '/create' do
@@ -22,17 +25,19 @@ post '/create' do
   @url = params[:url]
   url = Url.new
   url.url = @url
+  url.code = @code
   url.save
   
-  redirect "/show-code?code=#{@code}"
+  redirect "/show-url/#{@code}"
+end
+
+get '/show-url/:code' do
+  @showcode = params[:code]
+  
+  erb @showcode
 end
 
 get '/:code' do
   @url = Url.find_by(code: params[:code])
   redirect @url.url
-end
-
-get '/show-code?code=:code' do
-  @code = params[:code]
-  
 end
