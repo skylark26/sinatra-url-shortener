@@ -1,3 +1,17 @@
-%form{:action => "/create", :method => "post"}
+%form#form{:action => "/create", :method => "post"}
   %input{:name => "url", :type => "text", :class => "form-control", :placeholder => "http://"}
-  %input{:name => "submit", :type => "submit", :class => "btn btn-default", :value => "Short"}
+  %input#submit{:name => "submit", :class => "btn btn-default", :value => "Short"}
+
+:javascript
+  $('#submit').click(function(){
+    $.ajax({
+      url: "/create",
+      type: "POST",
+      data: $("#form").serialize(),
+      success: function(data){
+        $("#result").html("<h2>"+data+"</h2>");
+      }
+    });
+  });
+  
+%div#result
